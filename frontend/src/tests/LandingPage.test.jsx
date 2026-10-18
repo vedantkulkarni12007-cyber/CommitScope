@@ -30,7 +30,7 @@ describe('LandingPage', () => {
   it('renders the Repositories section heading', () => {
     renderPage()
     expect(
-      screen.getByRole('heading', { name: /repositories/i }),
+      screen.getByRole('heading', { level: 2, name: 'Repositories' }),
     ).toBeInTheDocument()
   })
 
