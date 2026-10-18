@@ -1,0 +1,41 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: var(--sp-16);
+  text-align: center;
+  gap: var(--sp-4);
+}
+
+.code {
+  font-size: 5rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--border-default);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.desc {
+  font-size: var(--text-base);
+  color: var(--text-2);
+  max-width: 360px;
+}
+
+.homeLink {
+  margin-top: var(--sp-3);
+  font-size: var(--text-sm);
+  color: var(--accent);
+}
+
+.homeLink:hover {
+  color: var(--accent-hover);
+}

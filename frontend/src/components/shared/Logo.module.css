@@ -1,0 +1,34 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--accent);
+  user-select: none;
+}
+
+.sm { gap: 6px; }
+.lg { gap: var(--sp-3); }
+
+.icon {
+  flex-shrink: 0;
+  transition: color var(--transition-fast);
+}
+
+.wordmark {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.sm .wordmark { font-size: var(--text-sm); }
+.md .wordmark { font-size: var(--text-base); }
+.lg .wordmark { font-size: var(--text-lg); }
+
+.word1 {
+  color: var(--text-1);
+}
+
+.word2 {
+  color: var(--accent);
+}

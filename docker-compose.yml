@@ -1,0 +1,92 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# CommitScope — Docker Compose (Development)
+#
+# Services:
+#   postgres   — PostgreSQL 16 database
+#   backend    — FastAPI application (hot-reload via bind mount)
+#   frontend   — Vite dev server (hot-reload via bind mount)
+#
+# Usage:
+#   cp .env.example .env        # fill in passwords
+#   docker compose up --build
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: commitscope-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-commitscope}
+      POSTGRES_USER: ${POSTGRES_USER:-commitscope}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-commitscope_dev}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U ${POSTGRES_USER:-commitscope} -d ${POSTGRES_DB:-commitscope}
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  # ── Backend (FastAPI) ───────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: commitscope-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-commitscope}:${POSTGRES_PASSWORD:-commitscope_dev}@postgres:5432/${POSTGRES_DB:-commitscope}
+      DEBUG: ${DEBUG:-false}
+      ALLOWED_REPO_ROOTS: ${ALLOWED_REPO_ROOTS:-/repos}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:3000}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      # Bind-mount source for hot-reload during development.
+      # PYTHONPATH=/app (set in Dockerfile) ensures the mounted package is used.
+      - ./backend:/app
+      # Read-only mount for repository analysis. Add your repo roots here.
+      - repo_mounts:/repos:ro
+    command: >
+      sh -c "
+        echo 'Running Alembic migrations...' &&
+        alembic upgrade head &&
+        echo 'Starting Uvicorn...' &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+  # ── Frontend (Vite) ─────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: commitscope-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    depends_on:
+      - backend
+    volumes:
+      # Bind-mount for hot-reload; node_modules stays in the container image.
+      - ./frontend:/app
+      - /app/node_modules
+
+# ── Volumes ─────────────────────────────────────────────────────────────────
+volumes:
+  postgres_data:
+    driver: local
+  repo_mounts:
+    driver: local

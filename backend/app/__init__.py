@@ -1,0 +1,1 @@
+"""CommitScope backend application package."""
