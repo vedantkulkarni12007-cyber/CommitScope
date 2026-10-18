@@ -7,11 +7,13 @@ business logic to the services layer.
 """
 from __future__ import annotations
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.config import settings
-from app.routers import health
+from app.routers import health, repositories
+from app.services.repository_service import RepositoryServiceError
 
 app = FastAPI(
     title="CommitScope API",
@@ -37,13 +39,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ── Exception Handlers ──────────────────────────────────────────────────────
+@app.exception_handler(RepositoryServiceError)
+async def repository_service_error_handler(
+    request: Request, exc: RepositoryServiceError
+) -> JSONResponse:
+    """Return structured JSON error response for domain service errors."""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "code": exc.code,
+            "message": exc.message,
+            "detail": exc.detail,
+        },
+    )
+
+
 # ── Routers ─────────────────────────────────────────────────────────────────
 app.include_router(health.router)
-
-# Future stages will add:
-#   from app.routers import repositories, graph, commits, analysis
-#   app.include_router(repositories.router)
-#   ...
+app.include_router(repositories.router)
 
 
 @app.get("/", tags=["root"], summary="API root")

@@ -1,11 +1,29 @@
 """
 Services package.
 
-Service modules contain the business logic layer. Routers delegate to services;
-services orchestrate analysis engines and database operations.
-
-Stage 2+ will add:
-  repository_service.py  — Repository registration, validation, and status management
-  git_service.py         — Pygit2-backed commit log extraction and file tree enumeration
-  graph_service.py       — NetworkX graph construction and metric computation
+Contains business logic layer. Routers validate and delegate to services.
 """
+from app.services.git_service import GitCommitData, GitFileData, GitRepoMetadata, GitService
+from app.services.repository_service import (
+    AccessDeniedError,
+    NotADirectoryError,
+    NotAGitRepositoryError,
+    PathNotFoundError,
+    RepositoryNotFoundError,
+    RepositoryService,
+    RepositoryServiceError,
+)
+
+__all__ = [
+    "GitService",
+    "GitCommitData",
+    "GitFileData",
+    "GitRepoMetadata",
+    "RepositoryService",
+    "RepositoryServiceError",
+    "PathNotFoundError",
+    "NotADirectoryError",
+    "AccessDeniedError",
+    "NotAGitRepositoryError",
+    "RepositoryNotFoundError",
+]

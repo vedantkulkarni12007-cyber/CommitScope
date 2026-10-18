@@ -60,6 +60,15 @@ def test_session_factory(test_engine):
 
 
 # ── DB session (per-test) ──────────────────────────────────────────────────────
+@pytest_asyncio.fixture(autouse=True)
+async def cleanup_db(test_engine):
+    """Truncate all tables after each test so tests remain strictly isolated."""
+    yield
+    async with test_engine.begin() as conn:
+        for table in reversed(Base.metadata.sorted_tables):
+            await conn.execute(table.delete())
+
+
 @pytest_asyncio.fixture
 async def db_session(test_session_factory):
     """Provide a database session that is rolled back after each test."""
