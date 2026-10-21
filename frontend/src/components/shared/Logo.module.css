@@ -1,8 +1,7 @@
 .root {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  color: var(--accent);
   user-select: none;
 }
 
@@ -11,24 +10,38 @@
 
 .icon {
   flex-shrink: 0;
-  transition: color var(--transition-fast);
+  filter: drop-shadow(1.5px 1.5px 0px var(--ink-black));
 }
 
 .wordmark {
-  font-family: var(--font-sans);
+  font-family: var(--font-heading);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
 }
 
-.sm .wordmark { font-size: var(--text-sm); }
-.md .wordmark { font-size: var(--text-base); }
-.lg .wordmark { font-size: var(--text-lg); }
+.sm .wordmark { font-size: 1.15rem; }
+.md .wordmark { font-size: 1.35rem; }
+.lg .wordmark { font-size: 1.75rem; }
 
 .word1 {
-  color: var(--text-1);
+  color: var(--ink-black);
 }
 
 .word2 {
-  color: var(--accent);
+  color: var(--accent-blue);
+  position: relative;
+}
+
+.word2::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: -2px;
+  bottom: -3px;
+  height: 2px;
+  background-color: var(--accent-red);
+  border-radius: 1px;
 }

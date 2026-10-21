@@ -1,0 +1,34 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-8);
+  gap: var(--sp-3);
+  text-align: center;
+}
+
+.spinnerCompass {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  animation: rotateCompass 2s ease-in-out infinite alternate;
+}
+
+.label {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+.sublabel {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+@keyframes rotateCompass {
+  0% { transform: rotate(-25deg); }
+  50% { transform: rotate(180deg); }
+  100% { transform: rotate(335deg); }
+}

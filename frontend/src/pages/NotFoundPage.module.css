@@ -3,39 +3,85 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100%;
-  padding: var(--sp-16);
+  min-height: 80vh;
+  padding: var(--sp-12) var(--sp-4);
   text-align: center;
-  gap: var(--sp-4);
+}
+
+.sheet {
+  background-color: var(--bg-paper-card);
+  border: 2px solid var(--ink-black);
+  border-radius: var(--sketch-radius-card);
+  box-shadow: var(--shadow-hard-lg);
+  padding: var(--sp-8) var(--sp-6);
+  max-width: 480px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  transform: rotate(-1deg);
+}
+
+.tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(0.8deg);
+  width: 90px;
+  height: 22px;
+  background-color: rgba(255, 255, 255, 0.75);
+  border: 1px dashed rgba(45, 45, 45, 0.4);
+  box-shadow: 0 1px 3px rgba(45, 45, 45, 0.12);
+  pointer-events: none;
 }
 
 .code {
   font-size: 5rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-heading);
   font-weight: 700;
-  color: var(--border-default);
+  color: var(--accent-red);
   line-height: 1;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.02em;
+  text-shadow: 2px 2px 0px var(--ink-black);
 }
 
 .title {
-  font-size: var(--text-2xl);
-  font-weight: 600;
-  color: var(--text-1);
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--ink-black);
 }
 
 .desc {
+  font-family: var(--font-body);
   font-size: var(--text-base);
-  color: var(--text-2);
+  color: var(--ink-secondary);
   max-width: 360px;
+  line-height: var(--leading-body);
 }
 
 .homeLink {
   margin-top: var(--sp-3);
-  font-size: var(--text-sm);
-  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background-color: var(--accent-blue);
+  color: #ffffff;
+  border: 2px solid var(--ink-black);
+  border-radius: var(--sketch-radius-md);
+  box-shadow: var(--shadow-hard);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-decoration: none;
+  transition: all var(--transition-fast);
 }
 
 .homeLink:hover {
-  color: var(--accent-hover);
+  background-color: var(--accent-blue-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-hard-lg);
+  color: #ffffff;
+  text-decoration: none;
 }

@@ -1,0 +1,166 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--sp-5);
+  min-height: 480px;
+}
+
+@media (max-width: 820px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.treePanel {
+  background-color: var(--bg-paper-card);
+  border: 2px solid var(--ink-black);
+  border-radius: var(--sketch-radius-card);
+  box-shadow: var(--shadow-hard);
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background-color: var(--bg-paper);
+  border: 1.5px solid var(--ink-black);
+  border-radius: var(--sketch-radius-sm);
+  box-shadow: var(--shadow-hard-xs);
+  padding: 6px 12px;
+}
+
+.searchInput {
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--ink-black);
+  width: 100%;
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+.treeList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  max-height: 420px;
+}
+
+.treeItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: var(--sketch-radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+}
+
+.treeItem:hover {
+  background-color: var(--bg-paper-surface);
+  color: var(--ink-black);
+}
+
+.treeItem.selected {
+  background-color: var(--sticky-yellow);
+  color: var(--sticky-yellow-ink);
+  border-color: var(--ink-black);
+  box-shadow: var(--shadow-hard-xs);
+  font-weight: 700;
+}
+
+.treeItemLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemIcon {
+  flex-shrink: 0;
+  font-size: 13px;
+}
+
+.churnTag {
+  font-family: var(--font-heading);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--bg-paper-muted);
+  border: 1px solid var(--ink-border-light);
+  flex-shrink: 0;
+}
+
+/* ── File Inspector Panel ──────────────────────────────────────────────────── */
+.inspectorPanel {
+  background-color: var(--bg-paper-card);
+  border: 2px solid var(--ink-black);
+  border-radius: var(--sketch-radius-card);
+  box-shadow: var(--shadow-hard);
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  position: relative;
+}
+
+.tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 70px;
+  height: 18px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px dashed rgba(45, 45, 45, 0.4);
+  pointer-events: none;
+}
+
+.inspectorTitle {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--ink-black);
+  border-bottom: 1.5px dashed var(--ink-border-light);
+  padding-bottom: var(--sp-2);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fieldLabel {
+  font-family: var(--font-heading);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+.fieldValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-black);
+  word-break: break-all;
+  background: var(--bg-paper-surface);
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--ink-border-light);
+}

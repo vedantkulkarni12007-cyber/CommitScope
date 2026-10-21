@@ -1,0 +1,82 @@
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.label {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--ink-black);
+}
+
+.optional {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--ink-black);
+  background-color: var(--bg-paper-card);
+  border: 2px solid var(--ink-black);
+  border-radius: var(--sketch-radius-md);
+  box-shadow: var(--shadow-hard-xs);
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.input.mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: var(--shadow-hard);
+  transform: translate(-1px, -1px);
+}
+
+.input.hasError {
+  border-color: var(--accent-red);
+  background-color: var(--sticky-coral);
+}
+
+.input.hasError:focus {
+  box-shadow: 3px 3px 0 var(--accent-red);
+}
+
+.helperText {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  line-height: 1.35;
+}
+
+.errorText {
+  font-family: var(--font-heading);
+  font-size: var(--text-xs);
+  color: var(--status-error-ink);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

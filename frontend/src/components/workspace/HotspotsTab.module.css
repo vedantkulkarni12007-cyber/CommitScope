@@ -1,0 +1,188 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.definitionBanner {
+  background-color: var(--sticky-coral);
+  border: 2px solid var(--ink-black);
+  border-radius: var(--sketch-radius-card);
+  box-shadow: var(--shadow-hard);
+  padding: var(--sp-4) var(--sp-5);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  position: relative;
+  transform: rotate(-0.4deg);
+}
+
+.tape {
+  position: absolute;
+  top: -10px;
+  left: 40px;
+  width: 70px;
+  height: 18px;
+  background-color: rgba(255, 255, 255, 0.75);
+  border: 1px dashed rgba(45, 45, 45, 0.4);
+  pointer-events: none;
+}
+
+.definitionIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.definitionText {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--sticky-coral-ink);
+  line-height: var(--leading-body);
+}
+
+.definitionText strong {
+  font-family: var(--font-heading);
+  color: var(--ink-black);
+}
+
+/* ── Ranked Hotspot Table ──────────────────────────────────────────────────── */
+.tableCard {
+  background-color: var(--bg-paper-card);
+  border: 2px solid var(--ink-black);
+  border-radius: var(--sketch-radius-card);
+  box-shadow: var(--shadow-hard);
+  padding: var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.cardTitle {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--ink-black);
+}
+
+.hotspotsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  text-align: left;
+}
+
+.hotspotsTable th {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--ink-black);
+}
+
+.hotspotsTable td {
+  padding: 12px;
+  border-bottom: 1px dashed var(--ink-border-light);
+  color: var(--ink-secondary);
+  vertical-align: middle;
+}
+
+.hotspotsTable tr:hover td {
+  background-color: var(--bg-paper-surface);
+}
+
+.rankBadge {
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-black);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--ink-black);
+  border-radius: 50%;
+  background: var(--bg-paper-muted);
+}
+
+.rank1 {
+  background: var(--accent-red);
+  color: #ffffff;
+}
+
+.rank2 {
+  background: var(--sticky-coral);
+  color: var(--sticky-coral-ink);
+}
+
+.filePath {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--ink-black);
+  font-size: var(--text-xs);
+}
+
+.heatBarWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 160px;
+}
+
+.heatBar {
+  height: 10px;
+  background-color: var(--bg-paper-muted);
+  border: 1.5px solid var(--ink-black);
+  border-radius: 4px;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.heatFill {
+  height: 100%;
+  background-color: var(--accent-red);
+  border-radius: 2px;
+}
+
+.churnCount {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-black);
+  min-width: 28px;
+}
+
+.riskBadge {
+  font-family: var(--font-heading);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--ink-black);
+}
+
+.riskHigh {
+  background: var(--sticky-coral);
+  color: var(--status-error-ink);
+}
+
+.riskMed {
+  background: var(--sticky-yellow);
+  color: var(--sticky-yellow-ink);
+}
+
+.riskLow {
+  background: var(--sticky-green);
+  color: var(--status-ready-ink);
+}

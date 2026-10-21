@@ -1,0 +1,89 @@
+.card {
+  position: relative;
+  border: 2px solid var(--ink-black);
+  border-radius: var(--sketch-radius-card);
+  box-shadow: var(--shadow-hard);
+  background-color: var(--bg-paper-card);
+  padding: var(--sp-5);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hard-lg);
+}
+
+/* ── Variants ──────────────────────────────────────────────────────────────── */
+.default {
+  background-color: var(--bg-paper-card);
+}
+
+.paper {
+  background-color: var(--bg-paper);
+}
+
+.muted {
+  background-color: var(--bg-paper-muted);
+}
+
+.surface {
+  background-color: var(--bg-paper-surface);
+}
+
+/* Sticky notes */
+.stickyYellow {
+  background-color: var(--sticky-yellow);
+  border-color: var(--ink-black);
+  color: var(--sticky-yellow-ink);
+  box-shadow: var(--shadow-hard);
+}
+
+.stickyGreen {
+  background-color: var(--sticky-green);
+  border-color: var(--ink-black);
+  color: var(--sticky-green-ink);
+  box-shadow: var(--shadow-hard);
+}
+
+.stickyBlue {
+  background-color: var(--sticky-blue);
+  border-color: var(--ink-black);
+  color: var(--sticky-blue-ink);
+  box-shadow: var(--shadow-hard);
+}
+
+.stickyCoral {
+  background-color: var(--sticky-coral);
+  border-color: var(--ink-black);
+  color: var(--sticky-coral-ink);
+  box-shadow: var(--shadow-hard);
+}
+
+/* ── Tape decoration on card ──────────────────────────────────────────────── */
+.tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 70px;
+  height: 18px;
+  background-color: rgba(255, 255, 255, 0.72);
+  border: 1px dashed rgba(45, 45, 45, 0.4);
+  box-shadow: 0 1px 3px rgba(45, 45, 45, 0.12);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Push pin on top */
+.pinContainer {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+}

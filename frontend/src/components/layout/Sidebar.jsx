@@ -1,175 +1,267 @@
-import { NavLink, useLocation } from 'react-router-dom'
+import React from 'react'
+import { NavLink, Link, useLocation } from 'react-router-dom'
 import Logo from '../shared/Logo'
+import Button from '../shared/Button'
+import { useRepoStore } from '../../store/repoStore'
 import styles from './Sidebar.module.css'
 
-/* ── Navigation items ───────────────────────────────────────────────────────── */
-const NAV_ITEMS = [
-  {
-    id: 'repositories',
-    label: 'Repositories',
-    path: '/',
-    icon: <ReposIcon />,
-    stage: 1,
-  },
-  {
-    id: 'architecture',
-    label: 'Architecture',
-    path: '/architecture',
-    icon: <GraphIcon />,
-    stage: 4,
-    disabled: true,
-  },
-  {
-    id: 'git-analytics',
-    label: 'Git Analytics',
-    path: '/analytics',
-    icon: <AnalyticsIcon />,
-    stage: 5,
-    disabled: true,
-  },
-  {
-    id: 'heatmap',
-    label: 'Heatmap',
-    path: '/heatmap',
-    icon: <HeatmapIcon />,
-    stage: 5,
-    disabled: true,
-  },
-  {
-    id: 'compare',
-    label: 'Compare',
-    path: '/compare',
-    icon: <CompareIcon />,
-    stage: 6,
-    disabled: true,
-  },
-]
-
-export default function Sidebar() {
+export default function Sidebar({ mobileOpen = false, onCloseMobile }) {
   const location = useLocation()
+  const { selectedRepo, health, setAddModalOpen } = useRepoStore()
+
+  const repoId = selectedRepo?.id
+
+  const navItems = [
+    {
+      id: 'repositories',
+      label: 'Repositories',
+      path: repoId ? `/repositories/${repoId}` : '/',
+      icon: <FolderTreeIcon />,
+      activeOn: ['/', `/repositories/${repoId}`],
+    },
+    {
+      id: 'architecture',
+      label: 'Architecture Graph',
+      path: repoId ? `/repositories/${repoId}/graph` : '/architecture',
+      icon: <NetworkGraphIcon />,
+    },
+    {
+      id: 'files',
+      label: 'Files & Tree',
+      path: repoId ? `/repositories/${repoId}/files` : '/files',
+      icon: <FileCodeIcon />,
+    },
+    {
+      id: 'history',
+      label: 'Git History',
+      path: repoId ? `/repositories/${repoId}/history` : '/history',
+      icon: <HistoryIcon />,
+    },
+    {
+      id: 'hotspots',
+      label: 'Churn Hotspots',
+      path: repoId ? `/repositories/${repoId}/hotspots` : '/hotspots',
+      icon: <FireIcon />,
+    },
+    {
+      id: 'compare',
+      label: 'Compare Snapshots',
+      path: '/compare',
+      icon: <CompareIcon />,
+      stage: 6,
+    },
+  ]
+
+  const isConnected = health.database === 'connected'
 
   return (
-    <aside className={styles.sidebar} aria-label="Main navigation">
-      {/* ── Logo ──────────────────────────────────────────────────────────── */}
-      <div className={styles.logoArea}>
-        <Logo size="md" showWordmark />
-        <span className={styles.version}>v0.1</span>
-      </div>
+    <>
+      {mobileOpen && (
+        <div
+          className={styles.mobileBackdrop}
+          onClick={onCloseMobile}
+          aria-hidden="true"
+        />
+      )}
 
-      {/* ── Divider ───────────────────────────────────────────────────────── */}
-      <div className={styles.divider} />
+      <aside
+        className={`${styles.sidebar} ${mobileOpen ? styles.open : ''}`}
+        aria-label="Main navigation"
+      >
+        {/* ── Brand Logo Area ───────────────────────────────────────────────── */}
+        <div className={styles.logoArea}>
+          <Link to="/" className={styles.logoLink} onClick={onCloseMobile}>
+            <Logo size="md" showWordmark />
+          </Link>
+          <span className={styles.versionBadge} title="CommitScope Prototype">
+            v0.1
+          </span>
+        </div>
 
-      {/* ── Navigation ────────────────────────────────────────────────────── */}
-      <nav className={styles.nav}>
-        <ul className={styles.navList} role="list">
-          {NAV_ITEMS.map((item) => (
-            <li key={item.id}>
-              {item.disabled ? (
-                <div
-                  className={`${styles.navItem} ${styles.disabled}`}
-                  title={`Coming in Stage ${item.stage}`}
-                  aria-disabled="true"
-                >
-                  <span className={styles.navIcon} aria-hidden="true">{item.icon}</span>
-                  <span className={styles.navLabel}>{item.label}</span>
-                  <span className={styles.soonBadge} aria-hidden="true">S{item.stage}</span>
-                </div>
-              ) : (
-                <NavLink
-                  to={item.path}
-                  end={item.path === '/'}
-                  className={({ isActive }) =>
-                    `${styles.navItem} ${isActive ? styles.active : ''}`
-                  }
-                >
-                  <span className={styles.navIcon} aria-hidden="true">{item.icon}</span>
-                  <span className={styles.navLabel}>{item.label}</span>
-                </NavLink>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
+        {/* ── Repository Context Switcher / Indicator ───────────────────────── */}
+        <div className={styles.contextSection}>
+          <div className={styles.contextLabel}>Current Workspace</div>
+          {selectedRepo ? (
+            <Link
+              to={`/repositories/${selectedRepo.id}`}
+              className={styles.repoBadge}
+              title={`Active repo: ${selectedRepo.name} (${selectedRepo.local_path})`}
+              onClick={onCloseMobile}
+            >
+              <span className={styles.repoName}>{selectedRepo.name}</span>
+              <span className={styles.repoBranch}>
+                {selectedRepo.default_branch || 'HEAD'}
+              </span>
+            </Link>
+          ) : (
+            <Link
+              to="/"
+              className={styles.repoBadge}
+              title="View all registered repositories"
+              onClick={onCloseMobile}
+            >
+              <span className={styles.repoName}>All Repositories</span>
+              <span className={styles.repoBranch}>workspace</span>
+            </Link>
+          )}
+        </div>
 
-      {/* ── Bottom utilities ──────────────────────────────────────────────── */}
-      <div className={styles.bottom}>
-        <div className={styles.divider} />
-        <a
-          href="https://github.com/commitscope/commitscope"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.utilLink}
-        >
-          <GitHubIcon />
-          <span>GitHub</span>
-        </a>
-        <a
-          href="/api/docs"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.utilLink}
-        >
-          <DocsIcon />
-          <span>API Docs</span>
-        </a>
-      </div>
-    </aside>
+        {/* ── Quick Add Repository CTA ──────────────────────────────────────── */}
+        <div className={styles.addRepoWrapper}>
+          <Button
+            variant="primary"
+            size="sm"
+            className={styles.quickAddBtn}
+            onClick={() => {
+              if (onCloseMobile) onCloseMobile()
+              setAddModalOpen(true)
+            }}
+            icon={<PlusIcon />}
+          >
+            + Add Repository
+          </Button>
+        </div>
+
+        {/* ── Navigation Items ──────────────────────────────────────────────── */}
+        <nav className={styles.nav}>
+          <ul className={styles.navList} role="list">
+            {navItems.map((item) => {
+              const isActive = item.activeOn
+                ? item.activeOn.includes(location.pathname)
+                : location.pathname === item.path
+
+              return (
+                <li key={item.id}>
+                  <NavLink
+                    to={item.path}
+                    className={`${styles.navItem} ${isActive ? styles.active : ''}`}
+                    onClick={onCloseMobile}
+                  >
+                    <span className={styles.navIcon} aria-hidden="true">
+                      {item.icon}
+                    </span>
+                    <span className={styles.navLabel}>{item.label}</span>
+                    {item.stage && (
+                      <span className={styles.soonBadge}>S{item.stage}</span>
+                    )}
+                  </NavLink>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
+
+        {/* ── Bottom Section: Health & External Links ────────────────────────── */}
+        <div className={styles.bottom}>
+          <div
+            className={`${styles.healthPill} ${
+              isConnected ? styles.healthConnected : styles.healthOffline
+            }`}
+            title={`API: ${health.status}, DB: ${health.database}`}
+          >
+            <span className={styles.healthDot} aria-hidden="true" />
+            <span>
+              {isConnected ? 'Backend: connected' : 'Backend: offline'}
+            </span>
+          </div>
+
+          <div className={styles.utilRow}>
+            <a
+              href="https://github.com/commitscope/commitscope"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.utilLink}
+            >
+              <GitHubIcon />
+              <span>GitHub</span>
+            </a>
+            <a
+              href="/api/docs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.utilLink}
+            >
+              <DocsIcon />
+              <span>API Docs</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+    </>
   )
 }
 
-/* ── SVG Icon components ────────────────────────────────────────────────────── */
-function ReposIcon() {
+/* ── Hand-Drawn / Crisp Nav Icons ─────────────────────────────────────────── */
+function FolderTreeIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="1.25" />
-      <path d="M5.5 4.5v7M5.5 4.5l2.5 2.5M5.5 9l2.5-2" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M10 6.5h2M10 9.5h2" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path
+        d="M2 4.5C2 3.67 2.67 3 3.5 3H7L8.5 5H14.5C15.33 5 16 5.67 16 6.5V13.5C16 14.33 15.33 15 14.5 15H3.5C2.67 15 2 14.33 2 13.5V4.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
 
-function GraphIcon() {
+function NetworkGraphIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <circle cx="4" cy="8" r="2" stroke="currentColor" strokeWidth="1.25" />
-      <circle cx="12" cy="4" r="2" stroke="currentColor" strokeWidth="1.25" />
-      <circle cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="1.25" />
-      <path d="M6 7.2L10 4.8M6 8.8L10 11.2" stroke="currentColor" strokeWidth="1.25" />
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <circle cx="4" cy="9" r="2.2" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="14" cy="4.5" r="2.2" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="14" cy="13.5" r="2.2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M6.2 8L11.8 5.5M6.2 10L11.8 12.5" stroke="currentColor" strokeWidth="1.5" />
     </svg>
   )
 }
 
-function AnalyticsIcon() {
+function FileCodeIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <rect x="2" y="9" width="2.5" height="5" rx="0.5" fill="currentColor" opacity="0.5" />
-      <rect x="6.75" y="6" width="2.5" height="8" rx="0.5" fill="currentColor" opacity="0.7" />
-      <rect x="11.5" y="2" width="2.5" height="12" rx="0.5" fill="currentColor" />
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M3.5 2H10.5L14.5 6V15C14.5 15.5 14 16 13.5 16H3.5C3 16 2.5 15.5 2.5 15V3C2.5 2.5 3 2 3.5 2Z" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M6 10L8 8M6 10L8 12M11 8L9 10M11 12L9 10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
     </svg>
   )
 }
 
-function HeatmapIcon() {
+function HistoryIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <rect x="2" y="2" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.2" />
-      <rect x="6.5" y="2" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.5" />
-      <rect x="11" y="2" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.8" />
-      <rect x="2" y="6.5" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.4" />
-      <rect x="6.5" y="6.5" width="3" height="3" rx="0.5" fill="currentColor" opacity="1" />
-      <rect x="11" y="6.5" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.6" />
-      <rect x="2" y="11" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.7" />
-      <rect x="6.5" y="11" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.3" />
-      <rect x="11" y="11" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.9" />
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="9" r="6.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M9 5.5V9.5L12 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function FireIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path
+        d="M9.5 2C9.5 2 13 5.5 13 9.5C13 12 11 15 9 15C7 15 5 13 5 10.5C5 7.5 7.5 5.5 8 5C8.5 6 9.5 7 9.5 8C10 6 9.5 2 9.5 2Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
 
 function CompareIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M5 3L2 8l3 5M11 3l3 5-3 5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M8 4v8" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeDasharray="1.5 2" />
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path d="M5 3.5L2 9L5 14.5M13 3.5L16 9L13 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9 4V14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="2 2" />
+    </svg>
+  )
+}
+
+function PlusIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M7 2V12M2 7H12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   )
 }
@@ -185,8 +277,8 @@ function GitHubIcon() {
 function DocsIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-      <rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.25" />
-      <path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+      <rect x="2" y="1" width="12" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M5 5H11M5 8H11M5 11H9" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   )
 }

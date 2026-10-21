@@ -1,0 +1,42 @@
+.wrapper {
+  margin-bottom: var(--sp-5);
+  position: relative;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  color: var(--ink-black);
+  line-height: 1.2;
+}
+
+.countTag {
+  font-family: var(--font-heading);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  padding: 2px 8px;
+  background-color: var(--bg-paper-muted);
+  border: 1.5px solid var(--ink-black);
+  border-radius: var(--sketch-radius-tag);
+  box-shadow: var(--shadow-hard-xs);
+  color: var(--ink-secondary);
+}
+
+.description {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+  margin-top: 4px;
+  max-width: 720px;
+}
+
+.underlineWrapper {
+  margin-top: 4px;
+}
